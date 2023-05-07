@@ -1,0 +1,26 @@
+# BUG.TXT
+
+
+
+--------------------------------------------------------------------------------------------------------
+## The Vulnerability
+
+    The vulnerability that exists in the REST API within the `CardInterface.kt` file:
+
+        ```
+        fun useCard(@Path("card_number") card_number: Int?, @Header("Authorization") authHeader: String): Call<Card?>
+        ```
+
+    the `card_number` parameter that is passed into the `useCard` function is how the giftcard that is 
+    going to be used is determined. If a malicious actor were to get (or guess) the card number of a
+    giftcard that did not belong to them, and pass that number in the request, the malicious actor would
+    be able to use a card that does not belong to them.
+
+
+## The Fix
+
+    The way to fix this issue is to pass along an authorization token along with the request. On the
+    server side, an authorization check can be made with that token, double checking that the request to 
+    use the specifed card (which is associated with a user id) matches the user id associated with the
+    authorization token. Any fraudulent request not matching would simply be denied.
+    
