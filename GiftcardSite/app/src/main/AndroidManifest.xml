@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <permission android:name="GiftCardSite.permission" android.protectionLevel="signature"/>
 
     <application
         android:allowBackup="true"
