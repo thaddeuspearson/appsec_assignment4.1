@@ -1,0 +1,92 @@
+# DIFFERENCE.TXT
+
+
+
+--------------------------------------------------------------------------------------------------------
+## Part 2.1 What's the difference?
+
+
+    1. What are the two types of intents?
+
+        The two types of intents are `implicit` and `explicit`. 
+        
+        Implicit intents do not specify the the component(s) that should be called, but rather specifies the 
+        action to be performed. The classic example of an implicit intent is a hyperlink.
+
+        Explicit intents do specify the components that should be called. This limits the action to only the 
+        component that is specified in the invocation
+
+
+    2. Which of the two types of Intents is (generally) more secure?
+
+        Since the components are limited to only the ones specified in the invocation, explicit intents are 
+        generally more secure that implicit intents.
+
+
+    3. What type of Intent is shown on lines 69 to 73 of SecondFragment.kt?
+
+        The type of intent shown is an implicit intent:
+
+            ```
+            var intent = Intent(Intent.ACTION_VIEW)
+            intent.type = "text/giftcards_browse"
+            intent.data = Uri.parse("https://appsec.moyix.net/api/index")
+            intent.putExtra("User", loggedInUser);
+            startActivity(intent)
+            ``` 
+
+        The use of `.ACTION_VIEW`, and gathering the necessary data from a `Uri.parse` call (hyperlink) is a 
+        classic example of an implicent intent.
+
+
+    4. What type of Intent is shown on lines 68 to 70 of ThirdFragment.kt?
+
+        The type of intent shown is an explicit intent:
+
+            ```
+            var intent = Intent(activity, ProductScrollingActivity::class.java)
+            intent.putExtra("User", loggedInUser);
+            startActivity(intent)
+            ```
+
+        `ProductScrollingActivity::class.java` is the external class that is to be invoked in this intent.
+
+
+    5. Which of these two Intents is the proper way to do an Intent?
+
+        The proper way (or more secure way) to do an intent is through the use of an explicit intent.
+        To fix the incorrect intent, I simply replaced:
+
+            ```
+            var intent = Intent(Intent.ACTION_VIEW)
+            intent.type = "text/giftcards_browse"
+            intent.data = Uri.parse("https://appsec.moyix.net/api/index")
+            ```
+
+        with:
+
+            ```
+            var intent = Intent(activity, ProductScrollingActivity::class.java)
+            ```
+
+        as ProductScrollingActivity explicitly sets the date and type within the intent-filter itself:
+
+            ```
+            <data android:mimeType="text/giftcards_browse" />
+            <data android:scheme="giftcard" />
+            <data android:host="appsec.moyix.net"/>
+            ```
+
+        Since the intent is now explicitly set, the concern of loading data from a potentially compromised 
+        hyperlink has been mitigated.
+
+
+--------------------------------------------------------------------------------------------------------
+## Part 2.2 Shutting out the world
+
+    In order to limit the possibility of other applications using Intents to launch activities of our 
+    application, I added the following `uses-permission` entry to AndroidManifest.xml:
+
+        ```
+        <uses-permission android:name="GiftCardSite.permission" android.protectionLevel="signature"/>
+        ```
