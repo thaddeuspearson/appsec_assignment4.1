@@ -88,5 +88,5 @@
     application, I added the following `uses-permission` entry to AndroidManifest.xml:
 
         ```
-        <uses-permission android:name="GiftCardSite.permission" android.protectionLevel="signature"/>
+        <permission android:name="GiftCardSite.permission" android.protectionLevel="signature"/>
         ```
