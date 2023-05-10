@@ -85,8 +85,10 @@
 ## Part 2.2 Shutting out the world
 
     In order to limit the possibility of other applications using Intents to launch activities of our 
-    application, I added the following `uses-permission` entry to AndroidManifest.xml:
+    application, I removed all of the following statements in each activity in the mainfest:
 
         ```
-        <permission android:name="GiftCardSite.permission" android.protectionLevel="signature"/>
+        <category android:name="android.intent.category.DEFAULT" />
         ```
+    
+    With these statements removed, no implicit intents would be able to resolve the activity.
