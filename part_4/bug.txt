@@ -8,13 +8,14 @@
     The vulnerability that exists in the REST API within the `CardInterface.kt` file:
 
         ```
+        @PUT("/api/use/{card_number}")
         fun useCard(@Path("card_number") card_number: Int?, @Header("Authorization") authHeader: String): Call<Card?>
         ```
 
     the `card_number` parameter that is passed into the `useCard` function is how the giftcard that is 
     going to be used is determined. If a malicious actor were to get (or guess) the card number of a
-    giftcard that did not belong to them, and pass that number in the request, the malicious actor would
-    be able to use a card that does not belong to them.
+    giftcard that did not belong to them, and pass that number to the api/use/ endpoint with a PUT 
+    request, the malicious actor would be able to use a card that does not belong to them.
 
 
 ## The Fix
